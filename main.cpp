@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -116,9 +117,55 @@ void deleteStudent()
     cout << "\nStudent Not Found!\n";
 }
 
+void saveToFile()
+{
+    ofstream file("students.txt");
+
+    for(auto student : database)
+    {
+        file << student.rollNo << endl;
+        file << student.name << endl;
+        file << student.age << endl;
+    }
+
+    file.close();
+
+    cout << "\nDatabase Saved Successfully!\n";
+}
+
+void loadFromFile()
+{
+    ifstream file("students.txt");
+
+    if(!file)
+    {
+        return;
+    }
+
+    Student s;
+
+    while(file >> s.rollNo)
+    {
+        file.ignore();
+
+        getline(file, s.name);
+
+        file >> s.age;
+        file.ignore();
+
+        database.push_back(s);
+    }
+
+    file.close();
+
+    cout << "\nDatabase Loaded Successfully!\n";
+}
+
 int main()
 {
     int choice;
+
+    loadFromFile();
 
     do
     {
@@ -128,7 +175,8 @@ int main()
         cout << "2. Display Students\n";
         cout << "3. Search Student\n";
         cout << "4. Delete Student\n";
-        cout << "5. Exit\n";
+        cout << "5. Save Database\n";
+        cout << "6. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
@@ -152,6 +200,12 @@ int main()
                 break;
 
             case 5:
+                saveToFile();
+                break;
+
+            case 6:
+                saveToFile();
+
                 cout << "\nExiting...\n";
                 break;
 
@@ -159,7 +213,7 @@ int main()
                 cout << "\nInvalid Choice!\n";
         }
 
-    } while(choice != 5);
+    } while(choice != 6);
 
     return 0;
 }
