@@ -20,6 +20,16 @@ void addStudent()
     cout << "\nEnter Roll Number: ";
     cin >> s.rollNo;
 
+    // Check for duplicate roll number
+    for(auto student : database)
+    {
+        if(student.rollNo == s.rollNo)
+        {
+            cout << "\nRoll Number Already Exists!\n";
+            return;
+        }
+    }
+
     cin.ignore();
 
     cout << "Enter Name: ";
@@ -45,18 +55,9 @@ void displayStudents()
 
     for(auto student : database)
     {
-        cout << "Roll No: "
-             << student.rollNo
-             << endl;
-
-        cout << "Name: "
-             << student.name
-             << endl;
-
-        cout << "Age: "
-             << student.age
-             << endl;
-
+        cout << "Roll No: " << student.rollNo << endl;
+        cout << "Name: " << student.name << endl;
+        cout << "Age: " << student.age << endl;
         cout << "---------------------\n";
     }
 }
@@ -74,17 +75,9 @@ void searchStudent()
         {
             cout << "\nStudent Found!\n";
 
-            cout << "Roll No: "
-                 << student.rollNo
-                 << endl;
-
-            cout << "Name: "
-                 << student.name
-                 << endl;
-
-            cout << "Age: "
-                 << student.age
-                 << endl;
+            cout << "Roll No: " << student.rollNo << endl;
+            cout << "Name: " << student.name << endl;
+            cout << "Age: " << student.age << endl;
 
             return;
         }
@@ -100,15 +93,41 @@ void deleteStudent()
     cout << "\nEnter Roll Number to Delete: ";
     cin >> roll;
 
-    for(auto it = database.begin();
-        it != database.end();
-        it++)
+    for(auto it = database.begin(); it != database.end(); it++)
     {
         if(it->rollNo == roll)
         {
             database.erase(it);
 
             cout << "\nStudent Deleted Successfully!\n";
+
+            return;
+        }
+    }
+
+    cout << "\nStudent Not Found!\n";
+}
+
+void updateStudent()
+{
+    int roll;
+
+    cout << "\nEnter Roll Number to Update: ";
+    cin >> roll;
+
+    for(auto &student : database)
+    {
+        if(student.rollNo == roll)
+        {
+            cin.ignore();
+
+            cout << "Enter New Name: ";
+            getline(cin, student.name);
+
+            cout << "Enter New Age: ";
+            cin >> student.age;
+
+            cout << "\nStudent Updated Successfully!\n";
 
             return;
         }
@@ -175,8 +194,9 @@ int main()
         cout << "2. Display Students\n";
         cout << "3. Search Student\n";
         cout << "4. Delete Student\n";
-        cout << "5. Save Database\n";
-        cout << "6. Exit\n";
+        cout << "5. Update Student\n";
+        cout << "6. Save Database\n";
+        cout << "7. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
@@ -200,10 +220,14 @@ int main()
                 break;
 
             case 5:
-                saveToFile();
+                updateStudent();
                 break;
 
             case 6:
+                saveToFile();
+                break;
+
+            case 7:
                 saveToFile();
 
                 cout << "\nExiting...\n";
@@ -213,7 +237,7 @@ int main()
                 cout << "\nInvalid Choice!\n";
         }
 
-    } while(choice != 6);
+    } while(choice != 7);
 
     return 0;
 }
